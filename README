@@ -1,2 +1,3 @@
 29/10/2013: Changed sustr and svstr calculations
 06/11/2013: Corrected CPP code in step2d routine
+14/11/2013: Fixed ocean_icetest.in to have the correct CPP flag
