@@ -194,14 +194,14 @@
 !
 # ifdef DISTRIBUTE
 #  ifdef EW_PERIODIC
-      logical :: EWperiodic=.TRUE.
+      logical :: EW_periodic=.TRUE.
 #  else
-      logical :: EWperiodic=.FALSE.
+      logical :: EW_periodic=.FALSE.
 #  endif
 #  ifdef NS_PERIODIC
-      logical :: NSperiodic=.TRUE.
+      logical :: NS_periodic=.TRUE.
 #  else
-      logical :: NSperiodic=.FALSE.
+      logical :: NS_periodic=.FALSE.
 #  endif
 # endif
 !      integer :: IstrR, IENDR, JstrR, JendR, IstrU, JstrV
