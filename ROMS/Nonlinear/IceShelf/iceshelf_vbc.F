@@ -56,9 +56,9 @@
       USE mod_iceshelf
       USE mod_coupling
       USE mod_stepping
-#ifdef ICESHELF_MORPH
+!#ifdef ICESHELF_MORPH
       USE mod_iceshelfvar
-#endif
+!#endif
 !
       implicit none
 !
@@ -126,9 +126,9 @@
       USE mod_scalars
 !
       USE mod_iceshelf
-#ifdef ICESHELF_MORPH
+!#ifdef ICESHELF_MORPH
       USE mod_iceshelfvar
-#endif
+!#endif
       USE bc_2d_mod
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
@@ -259,7 +259,7 @@
         DO i=Istr,IEND
 # ifdef SALINITY
           Sm=MAX(0.0_r8,t(i,j,N(ng),nrhs,isalt))
-          write(6,*)
+!          write(6,*)
 # else
           Sm=0.0_r8
 # endif

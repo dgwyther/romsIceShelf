@@ -3,3 +3,4 @@
 14/11/2013: Fixed ocean_icetest.in to have the correct CPP flag
 20/11/2013: Eva's edits for 'define' to 'defined' in 2 ana_ files
 21/11/2013: Eva's edits to iceshelf_vbc EWperiodic to EW_periodic
+21/11/2013: Bad code in iceshelf_vbc that executes with ICETEST
