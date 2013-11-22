@@ -5,3 +5,4 @@
 21/11/2013: Eva's edits to iceshelf_vbc EWperiodic to EW_periodic
 21/11/2013: Bad code in iceshelf_vbc that executes with ICETEST
 22/11/2013: Fixes for ustar and small to encourage heat exchange
+22/11/2013: Moved calculationg of surface stresses before ustar, so ustar is calculated correctly.
