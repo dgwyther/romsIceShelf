@@ -304,7 +304,7 @@
             gammaS(i,j) = ustar/(turb + Scadj - 9.0_r8)
 #    elif defined GAMMAS_Mc1987
 ! Uses simplified version of McPhee 1987
-            IF (ustar.gt.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
+            IF (ustar.ge.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
               turb = 2.5*LOG(5300.0_r8*ustar*ustar/ABS(f(i,j))) + 7.12  
             ELSE
               turb = 0.0_r8
