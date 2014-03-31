@@ -6,3 +6,4 @@
 21/11/2013: Bad code in iceshelf_vbc that executes with ICETEST
 22/11/2013: Fixes for ustar and small to encourage heat exchange
 22/11/2013: Moved calculationg of surface stresses before ustar, so ustar is calculated correctly.
+31/03/2014: merged bkgf latest edits into daves_edits; replaced some of my edits with bkgfs

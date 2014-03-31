@@ -56,9 +56,7 @@
       USE mod_iceshelf
       USE mod_coupling
       USE mod_stepping
-!#ifdef ICESHELF_MORPH
       USE mod_iceshelfvar
-!#endif
 !
       implicit none
 !
@@ -73,6 +71,9 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng), nnew(ng),                            &
+#if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
+     &                   GRID(ng) % Hz,                                 &
+#endif
      &                   GRID(ng) % z_r,                                &
      &                   GRID(ng) % z_w,                                &
      &                   GRID(ng) % zice,                               &
@@ -83,10 +84,12 @@
      &                   OCEAN(ng) % u,                                 &
      &                   OCEAN(ng) % v,                                 &
      &                   OCEAN(ng) % t,                                 &
+#ifdef ICESHELF_3EQN_VBC
      &                   ICESHELFVAR(ng) % gammaT,                      &
      &                   ICESHELFVAR(ng) % gammaS,                      &
      &                   ICESHELFVAR(ng) % Tb,                          &
      &                   ICESHELFVAR(ng) % Sb,                          &
+#endif
      &                   ICESHELFVAR(ng) % m,                           &
      &                   OCEAN(ng) % rho,                               &
      &                   FORCES(ng) % sustr,                            &
@@ -107,14 +110,20 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,nnew,                               &
+#if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
+     &                         Hz,                                      &
+#endif
      &                         z_r, z_w,                                &
      &                         zice,f,                                  &
 # ifdef ICESHELF_MORPH
      &                         iceshelf_draft,                          &
 # endif
      &                         u, v, t,                                 &
+#ifdef ICESHELF_3EQN_VBC
      &                         gammaT, gammaS,                          &
-     &                         Tb, Sb, m, rho,                          &
+     &                         Tb, Sb,                                  &
+#endif 
+     &                         m, rho,                                  &
      &                         sustr, svstr,                            &
 #   ifdef SHORTWAVE
      &                         srflx,                                   &
@@ -126,9 +135,9 @@
       USE mod_scalars
 !
       USE mod_iceshelf
-!#ifdef ICESHELF_MORPH
+#ifdef ICESHELF_MORPH
       USE mod_iceshelfvar
-!#endif
+#endif
       USE bc_2d_mod
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
@@ -141,13 +150,15 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs,nnew
-
 # ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: u(LBi:,LBj:,:,:)
       real(r8), intent(in) :: v(LBi:,LBj:,:,:)
       real(r8), intent(out) :: sustr(LBi:,LBj:)
       real(r8), intent(out) :: svstr(LBi:,LBj:)
       real(r8), intent(in) :: rho(LBi:,LBj:,:)
+#if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
+      real(r8), intent(in) :: Hz(LBi:,LBj:,:)
+#endif
       real(r8), intent(in) :: z_r(LBi:,LBj:,:)
       real(r8), intent(in) :: z_w(LBi:,LBj:,0:)
       real(r8), intent(in) :: zice(LBi:,LBj:)
@@ -156,10 +167,12 @@
       real(r8), intent(inout) :: iceshelf_draft(LBi:,LBj:,:)
 #endif
       real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
+#ifdef ICESHELF_3EQN_VBC
       real(r8), intent(out) :: gammaT(LBi:,LBj:)
       real(r8), intent(out) :: gammaS(LBi:,LBj:)
       real(r8), intent(out) :: Tb(LBi:,LBj:)
       real(r8), intent(out) :: Sb(LBi:,LBj:)
+#endif
       real(r8), intent(out) :: m(LBi:,LBj:)
 # ifdef SHORTWAVE
       real(r8), intent(inout) :: srflx(LBi:,LBj:)
@@ -171,6 +184,9 @@
       real(r8), intent(out) :: sustr(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: svstr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: rho(LBi:UBi,LBj:UBj,N(ng))
+#if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
+      real(r8), intent(in) :: Hz(LBi:UBi,LBj:UBj,N(ng))
+#endif
       real(r8), intent(in) :: z_r(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: z_w(LBi:UBi,LBj:UBj,0:N(ng))
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
@@ -179,10 +195,12 @@
       real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
 #endif
       real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
+#ifdef ICESHELF_3EQN_VBC
       real(r8), intent(out) :: gammaT(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: gammaS(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: Tb(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: Sb(LBi:UBi,LBj:UBj)
+#endif
       real(r8), intent(out) :: m(LBi:UBi,LBj:UBj)
 # ifdef SHORTWAVE
       real(r8), intent(inout) :: srflx(LBi:UBi,LBj:UBj)
@@ -192,18 +210,6 @@
 !
 !  Local variable declarations.
 !
-# ifdef DISTRIBUTE
-#  ifdef EW_PERIODIC
-      logical :: EW_periodic=.TRUE.
-#  else
-      logical :: EW_periodic=.FALSE.
-#  endif
-#  ifdef NS_PERIODIC
-      logical :: NS_periodic=.TRUE.
-#  else
-      logical :: NS_periodic=.FALSE.
-#  endif
-# endif
 !      integer :: IstrR, IENDR, JstrR, JendR, IstrU, JstrV
       integer :: i, j, itrc
       real(r8) :: Pradj,Scadj, Cdrt, cp_i
@@ -224,28 +230,6 @@
       real(r8), dimension(PRIVATE_2D_SCRATCH_ARRAY) :: wrk
 #  endif
 #  include "set_bounds.h"
-!-----------------------------------------------------------------------
-!  If ice shelf cavities, zero out for now the surface tracer flux
-!  over the ice.
-!-----------------------------------------------------------------------
-!
-#    ifdef ANA_SEAICE
-! Analytical sea-ice forcing in the open water areas
-      tyear = MOD(tdays(ng)-DSTART,365.25_r8)
-      IF (tyear.le.59.0_r8) THEN
-        sfcTemp = Tmax
-        sfcSalt = saltMin
-      ELSE IF (tyear.le.259.0_r8) THEN
-        sfcTemp = Tmin
-        sfcSalt = saltMin + sRateInc * (tyear - 59.0_r8)
-      ELSE IF (tyear.le.319.0_r8) THEN
-        sfcTemp = Tmin
-        sfcSalt = saltMax + sRateDec * (259.0_r8 - tyear)
-      ELSE
-        sfcTemp = Tmax
-        sfcSalt = saltMin
-      endif
-#    endif
 !
 !-----------------------------------------------------------------------
 !  If ice shelf cavities, replace surface wind stress with ice shelf
@@ -289,7 +273,7 @@
           END IF
         END DO
       END DO
-#   elIF defined UV_QDRAG
+#   elif defined UV_QDRAG
 !
 !  Set quadratic ice shelf cavity stress.
 !
@@ -300,7 +284,7 @@
      &                    v(i  ,j+1,N(ng),nrhs)+                        &
      &                    v(i-1,j  ,N(ng),nrhs)+                        &
      &                    v(i-1,j+1,N(ng),nrhs))
-            cff2=SQRT(u(i,j,N(ng),nrhs)*u(i,j,N(ng),nrhs)+cff1*cff1)
+            cff2=SQRT(u(i,j,N(ng),nrhs)*u(i,j,N(ng),nrhs)+cff2*cff2)
             sustr(i,j)=-rdrg2(ng)*u(i,j,N(ng),nrhs)*cff2
           END IF
         END DO
@@ -351,7 +335,43 @@
         END DO
       END DO
 #   endif
-
+!
+!  Apply boundary conditions.
+!
+      CALL bc_u2d_tile (ng, tile,                                       &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          sustr)
+      CALL bc_v2d_tile (ng, tile,                                       &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          svstr)
+#ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    sustr,svstr)
+#endif
+!-----------------------------------------------------------------------
+!  If ice shelf cavities, zero out for now the surface tracer flux
+!  over the ice.
+!-----------------------------------------------------------------------
+!
+#    ifdef ANA_SEAICE
+! Analytical sea-ice forcing in the open water areas
+      tyear = MOD(tdays(ng)-DSTART,365.25_r8)
+      IF (tyear.le.59.0_r8) THEN
+        sfcTemp = Tmax
+        sfcSalt = saltMin
+      ELSE IF (tyear.le.259.0_r8) THEN
+        sfcTemp = Tmin
+        sfcSalt = saltMin + sRateInc * (tyear - 59.0_r8)
+      ELSE IF (tyear.le.319.0_r8) THEN
+        sfcTemp = Tmin
+        sfcSalt = saltMax + sRateDec * (259.0_r8 - tyear)
+      ELSE
+        sfcTemp = Tmax
+        sfcSalt = saltMin
+      endif
+#    endif
 
 #    ifdef ICESHELF_3EQN_VBC
       Pradj = 12.5_r8*(Pr**(2/3))
@@ -378,14 +398,9 @@
 # else
          CALL potit(Sm,t(i,j,N(ng),nrhs,itemp),-zice(i,j),0.0_r8,Tm,i,j)
 # endif
-!            write(6,*) gamma,TFb,Tm
             stflx(i,j,itemp)=gamma*(TFb-Tm)
             stflx(i,j,isalt)=Cp*stflx(i,j,itemp)*refSalt/L
-
-#  ifdef ICESHELF_MORPH
             m(i,j) = stflx(i,j,isalt)/Sm
-            write(6,*) m(i,j),Sm
-#  endif
 
 #elif defined ICESHELF_3EQN_VBC
 ! Get the insitu salinity and temperature
@@ -399,9 +414,9 @@
 !    Calculate exchange coefficients. Note that this assumes log profile 
             ustar = SQRT(SQRT((0.5_r8*(sustr(i,j)+sustr(i+1,j)))**2+    &
      &                        (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2))
-!#    ifdef MASKING
-!            ustar = ustar*rmask(i,j)
-!#    endif
+#    ifdef MASKING
+            ustar = ustar*rmask(i,j)
+#    endif
 
            if(ustar.lt.small) ustar = small
 #    ifdef GAMMAS_KY1972
@@ -410,7 +425,7 @@
             gammaS(i,j) = ustar/(turb + Scadj - 9.0_r8)
 #    elif defined GAMMAS_Mc1987
 ! Uses simplified version of McPhee 1987
-            IF (ustar.ge.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
+            IF (ustar.gt.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
               turb = 2.5*LOG(5300.0_r8*ustar*ustar/ABS(f(i,j))) + 7.12  
             ELSE
               turb = 0.0_r8
@@ -503,12 +518,9 @@
 
 #else
       DO itrc=1,NT(ng)
-!        DO j=JstrR,JENDR
-!          DO i=IstrR,IENDR
-!            IF (zice(i,j).ne.0.0_r8) THEN
               stflx(i,j,itrc)=0.0_r8
       END DO
-
+#endif
           ELSE
             m(i,j) = 0.0_r8
 # if defined ANA_SEAICE
@@ -521,13 +533,6 @@
              stflx(i,j,itrc)=0.0_r8
           END DO
 # endif
-
-!          END IF
-!        END DO
-!      END DO
-
-#endif
-
           END IF
         END DO
       END DO
@@ -554,6 +559,25 @@
         END IF
 # endif
 
+!
+!  Apply gradient or periodic boundary conditions for the two fluxes
+!
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  stflx(:,:,itemp))
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  stflx(:,:,isalt))
+#    ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic, NSperiodic,         &
+     &                    stflx(:,:,itemp))
+      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic, NSperiodic,         &
+     &                    stflx(:,:,isalt))
+#    endif
 #   ifdef SHORTWAVE
       DO j=JstrR,JENDR
         DO i=IstrR,IENDR
@@ -563,21 +587,7 @@
         END DO
       END DO
 #   endif
-!
-!  Apply boundary conditions.
-!
-      CALL bc_u2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          sustr)
-      CALL bc_v2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          svstr)
-#ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    sustr,svstr)
-#endif
+
       RETURN
       END SUBROUTINE iceshelf_vbc_tile
 
