@@ -7,3 +7,5 @@
 22/11/2013: Fixes for ustar and small to encourage heat exchange
 22/11/2013: Moved calculationg of surface stresses before ustar, so ustar is calculated correctly.
 31/03/2014: merged bkgf latest edits into daves_edits; replaced some of my edits with bkgfs
+02/04/2014: corrected use of NSperiodic and EWperiodic in iceshelf_vbc.F
+02/04/2014: re-corrected ustar calc - cff2 was being calculated as a function of cff2
