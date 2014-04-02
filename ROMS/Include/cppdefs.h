@@ -465,6 +465,7 @@
 ** ICESHELF_3EQN_VBC   use to activate 3-equation ice/ocean thermodynamics   **
 ** ICESHELF_TEOS10     use for teos10 in situ freezing point temperature     **
 ** ANA_SEAICE          use to prescribe simple open ocean sea ice model      **
+** UV_ICEDRAG_GRID     use to turn on ice-ocean spatially varying drag       **
 **                                                                           **
 ** Fennel et al. (2006) biology model OPTIONS:                               **
 **                                                                           **

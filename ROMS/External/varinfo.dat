@@ -2666,6 +2666,15 @@
   'r2dvar'
   1.0d0
 
+'idrag2'                                           ! Input/Output
+  'quadratic ice-ocean drag grid'
+  'nondimensional'                                 ! [nondimensional]
+  'idrag2,scalar, series'
+  'ocean_time'
+  'icedg2'
+  'r2dvar'
+  1.0d0
+
 'ZoBot'                                            ! Input/Output
   'time invariant, bottom roughness length'
   'meter'                                          ! [m]

@@ -110,6 +110,9 @@
 !  rdrag      Linear drag coefficient (m/s).                           !
 #elif defined UV_QDRAG
 !  rdrag2     Quadratic drag coefficient (nondimensional).             !
+# ifdef UV_ICEDRAG_GRID
+!  idrag2     Quadratic ice-ocean drag coefficient (non-dim).          !
+# endif
 #endif
 !  xp         XI-coordinates (m) at PSI-points.                        !
 !  xr         XI-coordinates (m) at RHO-points.                        !
@@ -189,6 +192,9 @@
           real(r8), pointer :: rdrag(:,:)
 #elif defined UV_QDRAG
           real(r8), pointer :: rdrag2(:,:)
+# ifdef UV_ICEDRAG_GRID
+          real(r8), pointer :: idrag2(:,:)
+# endif
 #endif
           real(r8), pointer :: xp(:,:)
           real(r8), pointer :: xr(:,:)
@@ -373,6 +379,9 @@
       allocate ( GRID(ng) % rdrag(LBi:UBi,LBj:UBj) )
 #elif defined UV_QDRAG
       allocate ( GRID(ng) % rdrag2(LBi:UBi,LBj:UBj) )
+# ifdef UV_ICEDRAG_GRID
+      allocate ( GRID(ng) % idrag2(LBi:UBi,LBj:UBj) )
+# endif
 #endif
       allocate ( GRID(ng) % xp(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % xr(LBi:UBi,LBj:UBj) )

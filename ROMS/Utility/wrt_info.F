@@ -2189,6 +2189,43 @@
           END IF
         END IF
 #endif
+#ifdef UV_ICEDRAG_GRID
+!
+!  Spatially varying ice ocean friction parameter.
+!
+        IF (exit_flag.eq.NoError) THEN
+          IF (ncid.ne.STA(ng)%ncid) THEN
+            scale=1.0_r8
+# ifdef UV_QDRAG
+            IF (find_string(var_name, n_var, TRIM(Vname(1,icedg2)),     &
+     &                      varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#  ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#  endif
+     &                           GRID(ng) % idrag2,                     &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) TRIM(Vname(1,icedg2)),    &
+     &                                        TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) TRIM(Vname(1,icedg2)),      &
+     &                                      TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+# else
+           write(6,*) 'UV_QDRAG not selected. This must be selected,    &
+     &        as UV_ICEDRAG_GRID is not implemented for other drag'
+# endif
+          END IF
+        END IF
+#endif
+
       END IF GRID_VARS
 !
 !-----------------------------------------------------------------------

@@ -118,6 +118,9 @@
 # ifdef ICESHELF_MORPH
      &                         iceshelf_draft,                          &
 # endif
+# ifdef UV_ICEDRAG_GRID
+     &                         idrag2,                                  &
+# endif
      &                         u, v, t,                                 &
 #ifdef ICESHELF_3EQN_VBC
      &                         gammaT, gammaS,                          &
@@ -166,6 +169,9 @@
 #ifdef ICESHELF_MORPH
       real(r8), intent(inout) :: iceshelf_draft(LBi:,LBj:,:)
 #endif
+#ifdef UV_ICEDRAG_GRID
+      real(r8), intent(in) :: idrag2(LBi:,LBj:)
+#endif
       real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
 #ifdef ICESHELF_3EQN_VBC
       real(r8), intent(out) :: gammaT(LBi:,LBj:)
@@ -193,6 +199,9 @@
       real(r8), intent(in) :: f(LBi:UBi,LBj:UBj)
 #ifdef ICESHELF_MORPH
       real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+#endif
+#ifdef UV_ICEDRAG_GRID
+      real(r8), intent(in) :: idrag2(LBi:UBi,LBj:UBj)
 #endif
       real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
 #ifdef ICESHELF_3EQN_VBC
@@ -301,6 +310,36 @@
           END IF
         END DO
       END DO
+#    if defined UV_ICEDRAG_GRID
+      DO j=Jstr,JEND
+        DO i=IstrU,IEND
+          IF (zice(i,j)*zice(i-1,j).ne.0.0_r8) THEN
+            cff1=0.25_r8*(v(i  ,j  ,N(ng),nrhs)+                        &
+     &                    v(i  ,j+1,N(ng),nrhs)+                        &
+     &                    v(i-1,j  ,N(ng),nrhs)+                        &
+     &                    v(i-1,j+1,N(ng),nrhs))
+            cff2=SQRT(u(i,j,N(ng),nrhs)*u(i,j,N(ng),nrhs)+cff1*cff1)
+            sustr(i,j)=-0.5_r8*(idrag2(i-1,j)+idrag2(i,j))*             &
+     &                 u(i,j,N(ng),nrhs)*cff2
+          END IF
+        END DO
+      END DO
+      DO j=JstrV,JEND
+        DO i=Istr,IEND
+          IF (zice(i,j)*zice(i,j-1).ne.0.0_r8) THEN
+            cff1=0.25_r8*(u(i  ,j  ,N(ng),nrhs)+                        &
+     &                    u(i+1,j  ,N(ng),nrhs)+                        &
+     &                    u(i  ,j-1,N(ng),nrhs)+                        &
+     &                    u(i+1,j-1,N(ng),nrhs))
+            cff2=SQRT(cff1*cff1+v(i,j,N(ng),nrhs)*v(i,j,N(ng),nrhs))
+            svstr(i,j)=-0.5_r8*(idrag2(i,j-1)+idrag2(i,j))*             &
+     &                 v(i,j,N(ng),nrhs)*cff2
+          END IF
+        END DO
+      END DO
+
+#    endif
+
 #   elif defined UV_LDRAG
 !
 !  Set linear ice shelf cavity stress.

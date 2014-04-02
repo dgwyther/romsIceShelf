@@ -1497,6 +1497,42 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    GRID(ng) % rdrag2)
 #   endif
+#   ifdef UV_ICEDRAG_GRID
+!
+! Read in spacially varying ice-ocean drag grid
+!
+      gtype=r2dvar
+      status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,                &
+     &                  Vname(1,idragQ), varid_cedg2,                   &
+     &                  0, gtype, Vsize,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  Fscl, Fmin, Fmax,                               &
+#   ifdef MASKING
+     &                  GRID(ng) % rmask,                               &
+#   endif
+     &                  GRID(ng) % idrag2)
+      IF (status.ne.nf90_noerr) THEN
+        IF (Master) WRITE (stdout,30) TRIM(Vname(1,icedg2)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        ioerror=status
+        RETURN
+      END IF
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          GRID(ng) % idrag2)
+      END IF
+#   ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, model, 1,                           &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    GRID(ng) % idrag2)
+#   endif
+! Finish reading in spacially varying ice drag
+#   endif
+
 #  endif
 # endif
 !
