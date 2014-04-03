@@ -167,6 +167,7 @@
 !
 !  Input/output identification indices.
 !
+        integer  :: icedg2        ! ice-shelf ocean quadratic drag coeff
         integer  :: idAice        ! fraction of cell covered by ice
         integer  :: idismr        ! iceshelf melt rate
         integer  :: iddraft       ! iceshelf draft
@@ -1181,6 +1182,10 @@
               idragQ=varid
             CASE ('idZoBL')
               idZoBL=varid
+#endif
+#ifdef UV_ICEDRAG_GRID
+            CASE ('icedg2')
+              icedg2=varid
 #endif
             CASE ('idUbot')
               idUbot=varid

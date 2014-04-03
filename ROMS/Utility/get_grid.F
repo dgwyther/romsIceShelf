@@ -209,6 +209,37 @@
       END IF
 #  endif
 # endif
+
+# if defined UV_ICEDRAG_GRID && !defined ANA_ICEDRAG
+#  ifdef UV_LOGDRAG
+      IF (.not.find_string(var_name,n_var,TRIM(Vname(1,idZoBL)),        &
+     &                     varid_ZoBL)) THEN
+        IF (Master) WRITE (stdout,10) TRIM(Vname(1,idZoBL)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  endif
+#  ifdef UV_LDRAG
+      IF (.not.find_string(var_name,n_var,TRIM(Vname(1,idragL)),        &
+     &                     varid_dragL)) THEN
+        IF (Master) WRITE (stdout,10) TRIM(Vname(1,idragL)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  endif
+#  ifdef UV_QDRAG
+      IF (.not.find_string(var_name,n_var,TRIM(Vname(1,icedg2)),        &
+     &                     varid_cedg2)) THEN
+        IF (Master) WRITE (stdout,10) TRIM(Vname(1,icedg2)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  endif
+# endif
+
 !
 !  Open grid NetCDF file for reading.
 !
@@ -1503,7 +1534,7 @@
 !
       gtype=r2dvar
       status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,                &
-     &                  Vname(1,idragQ), varid_cedg2,                   &
+     &                  Vname(1,icedg2), varid_cedg2,                   &
      &                  0, gtype, Vsize,                                &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  Fscl, Fmin, Fmax,                               &

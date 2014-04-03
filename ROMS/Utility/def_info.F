@@ -3097,6 +3097,49 @@
 #endif
       END IF
 
+#ifdef UV_ICEDRAG_GRID
+!
+!  Spatially varying bottom friction parameter.
+!
+        IF (ncid.ne.STA(ng)%ncid) THEN
+# ifdef UV_LOGDRAG
+          Vinfo( 1)=Vname(1,idZoBL)
+          Vinfo( 2)=Vname(2,idZoBL)
+          Vinfo( 3)=Vname(3,idZoBL)
+          Vinfo(14)=Vname(4,idZoBL)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r2dvar,r8)
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+# endif
+# ifdef UV_LDRAG
+          Vinfo( 1)=Vname(1,idragL)
+          Vinfo( 2)=Vname(2,idragL)
+          Vinfo( 3)=Vname(3,idragL)
+          Vinfo(14)=Vname(4,idragL)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r2dvar,r8)
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+# endif
+# ifdef UV_QDRAG
+          Vinfo( 1)=Vname(1,icedg2)
+          Vinfo( 2)=Vname(2,icedg2)
+          Vinfo( 3)=Vname(3,icedg2)
+          Vinfo(14)=Vname(4,icedg2)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r2dvar,r8)
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+# endif
+        END IF
+#endif
+      END IF
+
+
   10  FORMAT (i3.3,'x',i3.3)
   20  FORMAT (/,' DEF_INFO - error while creating global attribute: ',  &
      &        a,/,12x,a)
