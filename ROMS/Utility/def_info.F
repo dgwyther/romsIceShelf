@@ -3095,7 +3095,6 @@
 # endif
         END IF
 #endif
-      END IF
 
 #ifdef UV_ICEDRAG_GRID
 !
