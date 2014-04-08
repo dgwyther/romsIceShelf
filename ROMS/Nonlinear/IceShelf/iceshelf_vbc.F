@@ -81,6 +81,9 @@
 #ifdef ICESHELF_MORPH
      &                   ICESHELFVAR(ng) % iceshelf_draft,              &
 #endif
+# ifdef UV_ICEDRAG_GRID
+     &                   ICESHELFVAR(ng) % idrag2,                      &
+# endif
      &                   OCEAN(ng) % u,                                 &
      &                   OCEAN(ng) % v,                                 &
      &                   OCEAN(ng) % t,                                 &

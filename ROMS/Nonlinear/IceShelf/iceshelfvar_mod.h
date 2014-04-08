@@ -28,6 +28,9 @@
         real(r8), pointer :: iceshelf_draft0(:,:)
         real(r8), pointer :: iceshelf_draft(:,:,:)
 # endif
+# ifdef UV_ICEDRAG_GRID
+          real(r8), pointer :: idrag2(:,:)
+# endif
 #endif
       END TYPE T_ICESHELFVAR
 
@@ -71,6 +74,9 @@
 # if defined ICESHELF_MORPH
       allocate ( ICESHELFVAR(ng) % iceshelf_draft0(LBi:UBi,LBj:UBj) )
       allocate ( ICESHELFVAR(ng) % iceshelf_draft(LBi:UBi,LBj:UBj,1:2))
+# endif
+# ifdef UV_ICEDRAG_GRID
+      allocate ( ICESHELFVAR(ng) % idrag2(LBi:UBi,LBj:UBj) )
 # endif
 #endif
 
