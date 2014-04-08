@@ -23,6 +23,8 @@
 !! ana_diag.h          Customized diagnostics.                         !
 !! ana_drag.h          Analytical spatially varying bottom friction    !
 !!                       parameters.                                   !
+!! ana_icedrag.h       Analytical spatially varying ice-bottom         !
+!!                        friction parameters                          !
 !! ana_fsobc.h         Analytical free-surface boundary conditions.    !
 !! ana_grid.h          Analytical model grid set-up.                   !
 !! ana_humid.h         Analytical surface air humidity.                !
@@ -102,6 +104,11 @@
 # if defined ANA_DRAG && defined UV_DRAG_GRID
 #  include <ana_drag.h>
 # endif
+
+# if defined ANA_ICEDRAG && defined UV_ICEDRAG_GRID
+#  include <ana_icedrag.h>
+# endif
+
 
 # ifdef ANA_FSOBC
 #  include <ana_fsobc.h>
