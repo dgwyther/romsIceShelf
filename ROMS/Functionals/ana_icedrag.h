@@ -7,22 +7,11 @@
 !!   See License_ROMS.txt                                              !
 !================================================== David E. Gwyther ===
 !                                                                      !
-!  This routine sets analytical, spatially varying bottom roughness    !
+!  This routine sets analytical, spatially varying ice bottom roughness!
 !  length (m), or linear drag coefficients (m/s), or quadratic drag    !
-!  coefficients (nondimensional) at RHO-points. It  depends on  the    !
-!  activated bottom stress formulation.                                !
+!  coefficients (nondimensional) at RHO-points.                        !
 !                                                                      !
-!  There are many ways to compute spatially varying drag parameters:   !
-!                                                                      !
-!    * Partition the grid into different provinces with different      !
-!      with different values (regimes).                                !
-!    * A piecewise value that depends on the water depth.              !
-!    * Empirical formulas in terms of water depth (Chezy formula)      !
-!    * Inverse techniques using adjoint parameter estimation, but      !
-!      it is beyond the scope of this routine.                         !
-!                                                                      !
-!  The User should experiment to get the appropriate distribution      !
-!  for their application.                                              !
+! Currently, only UV_QDRAG is implemented.                             !
 !                                                                      !
 !=======================================================================
 !
@@ -36,7 +25,7 @@
 
 #include "tile.h"
 !
-      CALL ana_icedrag_tile (ng, tile, model,                              &
+      CALL ana_icedrag_tile (ng, tile, model,                           &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
 #if defined UV_LOGDRAG
@@ -44,7 +33,7 @@
 #elif defined UV_LDRAG
      &                    GRID(ng) % rdrag)
 #elif defined UV_QDRAG
-     &                    GRID(ng) % idrag2)
+     &                    ICESHELFVAR(ng) % idrag2)
 #endif
 !
 ! Set analytical header file name used.

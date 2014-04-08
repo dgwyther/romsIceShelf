@@ -2204,7 +2204,7 @@
 #  ifdef MASKING
      &                           GRID(ng) % rmask_io,                   &
 #  endif
-     &                           GRID(ng) % idrag2,                     &
+     &                           ICESHELFVAR(ng) % idrag2,              &
      &                           SetFillVal = .FALSE.)
               IF (status.ne.nf90_noerr) THEN
                 IF (Master) WRITE (stdout,10) TRIM(Vname(1,icedg2)),    &

@@ -1541,7 +1541,7 @@
 #   ifdef MASKING
      &                  GRID(ng) % rmask,                               &
 #   endif
-     &                  GRID(ng) % idrag2)
+     &                  ICESHELFVAR(ng) % idrag2)
       IF (status.ne.nf90_noerr) THEN
         IF (Master) WRITE (stdout,30) TRIM(Vname(1,icedg2)),            &
      &                                TRIM(ncname)
@@ -1552,14 +1552,14 @@
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          GRID(ng) % idrag2)
+     &                          ICESHELFVAR(ng) % idrag2)
       END IF
 #   ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, model, 1,                           &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    GRID(ng) % idrag2)
+     &                    ICESHELFVAR(ng) % idrag2)
 #   endif
 ! Finish reading in spacially varying ice drag
 #   endif
