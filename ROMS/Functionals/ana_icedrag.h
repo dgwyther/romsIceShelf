@@ -43,7 +43,7 @@
 #else
       IF (Lanafile.and.(tile.eq.0)) THEN
 #endif
-        ANANAME( 2)=__FILE__
+        ANANAME(38)=__FILE__
       END IF
 
       RETURN

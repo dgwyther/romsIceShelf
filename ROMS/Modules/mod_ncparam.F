@@ -486,7 +486,7 @@
 !
         logical :: Lanafile
 
-        character (len=256), dimension(37) :: ANANAME
+        character (len=256), dimension(38) :: ANANAME
 
 #ifdef BIOLOGY
 !
