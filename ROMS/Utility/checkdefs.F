@@ -230,6 +230,18 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+10)=' ANA_DRAG,'
 #endif
+#if defined ANA_ICEDRAG && defined UV_ICEDRAG_GRID
+      IF (Master) WRITE (stdout,20) 'ANA_ICEDRAG_GRID',                 &
+# if defined UV_LOGDRAG
+     &   'Analytical spatially varying bottom roughness length.'
+# elif defined UV_LDRAG
+     &   'Analytical spatially varying linear drag coefficient.'
+# elif defined UV_QDRAG
+     &   'Analytical spatially varying quadratic ice-ocean drag coeff.'
+# endif
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+13)=' ANA_ICEDRAG,'
+#endif
 #ifdef ANA_DIAG
       IF (Master) WRITE (stdout,20) 'ANA_DIAG',                         &
      &   'Customized diagnostics.'
@@ -2026,6 +2038,18 @@
 # endif
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+14)=' UV_DRAG_GRID,'
+#endif
+#ifdef UV_ICEDRAG_GRID
+      IF (Master) WRITE (stdout,20) 'UV_ICEDRAG_GRID',                     &
+# if defined UV_LOGDRAG
+     &   'Spatially varying bottom roughness length.'
+# elif defined UV_LDRAG
+     &   'Spatially varying linear drag coefficient.'
+# elif defined UV_QDRAG
+     &   'Spatially varying quadratic drag coefficient.'
+# endif
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+17)=' UV_ICEDRAG_GRID,'
 #endif
 #ifdef UV_LDRAG
       IF (Master) WRITE (stdout,20) 'UV_LDRAG',                         &
