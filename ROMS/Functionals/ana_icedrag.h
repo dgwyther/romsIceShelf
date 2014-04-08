@@ -1,4 +1,4 @@
-      SUBROUTINE ana_drag (ng, tile, model)
+      SUBROUTINE ana_icedrag (ng, tile, model)
 !
 !! svn $Id$
 !!======================================================================
@@ -50,7 +50,7 @@
       END SUBROUTINE ana_icedrag
 !
 !***********************************************************************
-      SUBROUTINE ana_drag_tile (ng, tile, model,                        &
+      SUBROUTINE ana_icedrag_tile (ng, tile, model,                        &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          IminS, ImaxS, JminS, JmaxS,             &
 #if defined UV_LOGDRAG
@@ -211,4 +211,4 @@
 #endif
 
       RETURN
-      END SUBROUTINE ana_drag_tile
+      END SUBROUTINE ana_icedrag_tile
