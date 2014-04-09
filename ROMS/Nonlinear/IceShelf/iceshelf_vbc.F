@@ -286,6 +286,7 @@
         END DO
       END DO
 #   elif defined UV_QDRAG
+#    if !defined UV_ICEDRAG_GRID 
 !
 !  Set quadratic ice shelf cavity stress.
 !
@@ -313,7 +314,7 @@
           END IF
         END DO
       END DO
-#    if defined UV_ICEDRAG_GRID
+#    elif defined UV_ICEDRAG_GRID
       DO j=Jstr,JEND
         DO i=IstrU,IEND
           IF (zice(i,j)*zice(i-1,j).ne.0.0_r8) THEN
