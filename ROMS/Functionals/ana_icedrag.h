@@ -18,6 +18,7 @@
       USE mod_param
       USE mod_grid
       USE mod_ncparam
+      USE mod_iceshelfvar
 !
 ! Imported variable declarations.
 !
