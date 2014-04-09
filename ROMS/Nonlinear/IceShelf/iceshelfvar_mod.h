@@ -164,6 +164,9 @@
             ICESHELFVAR(ng) % iceshelf_draft(i,j,1) = IniVal
             ICESHELFVAR(ng) % iceshelf_draft(i,j,2) = IniVal
 # endif
+# if defined UV_ICEDRAG_GRID
+            ICESHELFVAR(ng) % idrag2(i,j) = IniVal
+# endif
           END DO
         END DO
 #endif
