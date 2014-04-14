@@ -763,6 +763,24 @@
         END DO
       END IF
 #endif
+
+#if defined ANA_ICEDRAG && defined UV_ICEDRAG_GRID
+!
+!-----------------------------------------------------------------------
+!  Set analytical spatially varying ice-ocean friction parameter.
+!-----------------------------------------------------------------------
+!
+      IF (Nrun.eq.ERstr) THEN
+        DO ng=1,Ngrids
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_icedrag (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END DO
+      END IF
+#endif
+
+
 !
 !-----------------------------------------------------------------------
 !  Compute grid stiffness.
