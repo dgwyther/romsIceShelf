@@ -34,6 +34,9 @@
       USE mod_biology
 #endif
       USE mod_grid
+#ifdef UV_ICEDRAG_GRID
+      USE mod_iceshelfvar
+#endif
 #ifdef FOUR_DVAR
       USE mod_fourdvar
 #endif
