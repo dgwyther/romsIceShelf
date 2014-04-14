@@ -155,7 +155,6 @@
 # elif defined UV_QDRAG
       DO j=JstrT,JendT          ! based on Chezy coefficient (g/c^2)
         DO i=IstrT,IendT
-          cff=1.8_r8*GRID(ng)%h(i,j)*LOG(GRID(ng)%h(i,j))
           idrag2(i,j)=0.003_r8
         END DO
       END DO

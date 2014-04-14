@@ -3098,7 +3098,7 @@
 
 #ifdef UV_ICEDRAG_GRID
 !
-!  Spatially varying bottom friction parameter.
+!  Spatially varying ice ocean friction parameter.
 !
         IF (ncid.ne.STA(ng)%ncid) THEN
 # ifdef UV_LOGDRAG
